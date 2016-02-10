@@ -66,7 +66,8 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxxhdpi-3072-hwu
 
 # Art
 PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.dex2oat-swap=false
+    dalvik.vm.dex2oat-swap=false \
+    dalvik.vm.image-dex2oat-filter=speed
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -181,6 +182,9 @@ PRODUCT_PACKAGES += \
     init.baseband.sh \
     ueventd.g3.rc
 
+PRODUCT_COPY_FILES += \
+    device/lge/g3-common/twrp.fstab:recovery/root/etc/twrp.fstab
+
 # RIL symbols
 PRODUCT_PACKAGES += \
     liblge
@@ -197,3 +201,7 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     wpa_supplicant \
     wpa_supplicant.conf
+    
+# Doze mode
+PRODUCT_PACKAGES += \
+    G3Doze   

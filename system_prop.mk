@@ -65,3 +65,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.qualcomm.sns.daemon=e \
     debug.qualcomm.sns.hal=e \
     debug.qualcomm.sns.libsensor1=e
+
+#Wifi Hack
+PRODUCT_PROPERTY_OVERRIDES += \
+    net.tethering.noprovisioning=true
+
+# Other
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.strictmode.disable=true \
+    ro.telephony.call_ring.delay=0 \
+    ring.delay=0

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2016 The PacRom Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ TARGET_NO_RADIOIMAGE := true
 # Kernel
 BOARD_CUSTOM_BOOTIMG := true
 BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
-BOARD_KERNEL_CMDLINE := console=none androidboot.hardware=g3 user_debug=31 msm_rtb.filter=0x0
+BOARD_KERNEL_CMDLINE := console=none androidboot.hardware=g3 user_debug=31 msm_rtb.filter=0x0 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
@@ -74,6 +74,18 @@ COMMON_GLOBAL_CFLAGS += -DPROPERTY_PERMS_APPEND=' \
 BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw/
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/virtual/input/lge_touch/tap_to_wake"
 
+# Enable dex-preoptimization to speed up first boot sequence
+ ifeq ($(HOST_OS),linux)
+   ifeq ($(TARGET_BUILD_VARIANT),user)
+     ifeq ($(WITH_DEXPREOPT),)
+       WITH_DEXPREOPT := true
+     endif
+   endif
+ endif
+ DONT_DEXPREOPT_PREBUILTS := true
+ WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
+ 
+
 # Crypto
 TARGET_HW_DISK_ENCRYPTION := true
 
@@ -96,6 +108,8 @@ COMMON_GLOBAL_CFLAGS += \
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
+BOARD_CACHEIMAGE_PARTITION_SIZE := 889192448
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # Power
 TARGET_POWERHAL_VARIANT := qcom
@@ -107,10 +121,58 @@ BOARD_RIL_CLASS += ../../../device/lge/g3-common/ril
 BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery
-BOARD_SUPPRESS_EMMC_WIPE := true
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+
+####################################################
+### TWRP Recovery Edition: Updated: 02/07/2016   ###
+####################################################
+
 TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+
+# TW_INTERNAL_STORAGE_PATH := "/data/media"
+# TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
+# TW_EXTERNAL_STORAGE_PATH := "/external_sd"
+# TW_EXTERNAL_STORAGE_MOUNT_POINT := "external_sd"
+# TW_EXTERNAL_STORAGE_PATH := "/usb-otg"
+# TW_EXTERNAL_STORAGE_MOUNT_POINT := "usb-otg"
+
+# TW_INCLUDE_JPEG := true
+# TW_INCLUDE_NTFS_3G := true
+# TW_FLASH_FROM_STORAGE := true
+
+
+# Edited for TWRP Recovery
+
+# TW_THEME := portrait_hdpi
+TWRP_INCLUDE_LOGCAT := true
+BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+BOARD_HAS_NO_SELECT_BUTTON := true
+TW_HAS_DOWNLOAD_MODE := true
+BOARD_HAS_LARGE_FILESYSTEM := true
+DEVICE_RESOLUTION := 1440x2560
+TW_NO_USB_STORAGE := true
+TW_CRYPTO_FS_TYPE := "ext4"
+TW_NO_EXFAT_FUSE := true
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+BOARD_SUPPRESS_SECURE_ERASE := true
+BOARD_SUPPRESS_EMMC_WIPE := true
+RECOVERY_SDCARD_ON_DATA := true
+TW_THEME := portrait_hdpi
+DEVICE_RESOLUTION := 1440x2560
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TW_EXTRA_LANGUAGES := true
+TW_DEFAULT_EXTERNAL_STORAGE := true
+TW_INCLUDE_L_CRYPTO := true
+TW_INCLUDE_CRYPTO := true
+TW_BRIGHTNESS_PATH := "/sys/devices/mdp.0/qcom\x2cmdss_fb_primary.175/leds/lcd-backlight/brightness"
+TW_MAX_BRIGHTNESS := 255
+TW_DEFAULT_BRIGHTNESS := 175
+TARGET_USES_LOGD := true
+TW_SCREEN_BLANK_ON_BOOT := true
+# TW_NO_SCREEN_TIMEOUT := false
+TW_EXCLUDE_SUPERSU := true
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
@@ -118,3 +180,6 @@ BOARD_SEPOLICY_DIRS += device/lge/g3-common/sepolicy
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
+
+# Enable Minikin text layout engine
+USE_MINIKIN := true
