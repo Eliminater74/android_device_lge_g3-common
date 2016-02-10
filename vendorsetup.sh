@@ -1,3 +1,7 @@
 add_lunch_combo pac_d855-user
 add_lunch_combo pac_d855-userdebug
 add_lunch_combo pac_d855-eng
+
+add_lunch_combo pac_d851-user
+add_lunch_combo pac_d851-userdebug
+add_lunch_combo pac_d851-eng
